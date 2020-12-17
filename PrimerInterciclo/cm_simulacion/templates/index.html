@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CM | SIMULACION </title>
+
+    <!-- Incorporar los styles de materialize -->
+    <link type="text/css" rel="stylesheet" href="/lib/materialize/css/materialize.min.css">
+
+    <!-- Incorporar los styles del proyecto -->
+    <link type="text/css" rel="stylesheet" href="/css/cm-materialize.css">
+</head>
+<body>
+    <!-- Cabecera del contenido -->
+    <header id="cm-header">
+        <nav class="nav-wrapper grey darken-4">
+            <a href="" class="brand-logo">
+                <i class="large material-icons icon-logo">dashboard</i>
+                SIMULACION DE EVENTOS DISCRETOS
+            </a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/random-walk/">REGRESION</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Principal del contenido -->
+    <main id="app-simulacion">
+        <div class="row" style="margin: 0">
+            <div class="col s5">
+                <div id="datos-ingreso">
+                    <div id="chatbot-header" class="card grey darken">
+                        <div class="row content-tittle">
+                            <div class="col s10" style="padding: 0">
+                                <span class="col s12 card-title" style="font-weight: 600">CM|Ingreso</span>
+                                <span class="col s12 card-sub-title">Ingresa los datos necesarios para correr la simulaicon! </span>
+                            </div>
+                        </div>
+                        <div class="progress">
+                          <div :class="[cargar ? 'indeterminate' : '']"></div>
+                        </div>
+                    </div>
+                    <div id="chatbot-content">
+                        <div class="divider"></div>
+                        <span class="title" style="font-weight: 600">TOTAL RECURSOS</span>
+                        <div class="divider"></div>
+                        <div class="row" style="margin: 10px 0">
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.ambulancias" id="ambulancias" type="text"
+                                       name="ambulancias" class="num requerido-CLI" maxlength="6">
+                                <label for="ambulancias">AMBULANCIAS: </label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.enfermeras" id="enfermeras" type="text"
+                                       name="enfermeras" class="num requerido-CLI" maxlength="6">
+                                <label for="enfermeras">ENFERMERAS: </label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.camas" id="camas" type="text" name="camas"
+                                       class="num requerido-CLI" maxlength="6">
+                                <label for="camas">CAMAS: </label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.respiradores" id="respiradores" type="text"
+                                       name="respiradores" class="num requerido-CLI" maxlength="6">
+                                <label for="respiradores">RESPIRADORES: </label>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <span class="title" style="font-weight: 600">TIEMPOS PROMEDIO (MIN)</span>
+                        <div class="divider"></div>
+                        <div class="row" style="margin: 10px 0">
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.tiempoLlegada" id="tiempo-llegada" type="text"
+                                       name="Tiempo promedio de traslado" class="dec requerido-CLI" maxlength="6">
+                                <label for="tiempo-llegada">T. LLEGADA: </label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.tiempoTraslado" id="tiempo-traslado" type="text"
+                                       name="Tiempo promedio de traslado" class="dec requerido-CLI" maxlength="6">
+                                <label for="tiempo-traslado">T. TRASLADO: </label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.tiempoEstabilizar" id="tiempo-estabilizar" type="text"
+                                       name="Tiempo promedio de estabilizacion" class="dec requerido-CLI" maxlength="6">
+                                <label for="tiempo-estabilizar">T. ESTABILIZAR: </label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.tiempoAsistencia" id="tiempo-asistencia" type="text"
+                                       name="Tiempo promedio de asistencia" class="dec requerido-CLI" maxlength="6">
+                                <label for="tiempo-asistencia">T. ASISTENCIA: </label>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <span class="title" style="font-weight: 600">OTRAS PROPIEDADES</span>
+                        <div class="divider"></div>
+                        <div class="row" style="margin: 10px 0">
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.tasaEmergencia" id="tasa-emergencias" type="text"
+                                       name="Tasa de emergencias" class="dec requerido-CLI" maxlength="5">
+                                <label for="tasa-emergencias">TS. EMERGENCIAS: </label>
+                            </div>
+                            <div class="input-field col s4">
+                                <input v-model="datosSimulacion.tasaVulneravilidad" id="tasa-vulnerabilidad" type="text"
+                                       name="Tasa de vulneravilidad" class="dec requerido-CLI" maxlength="5">
+                                <label for="tasa-vulnerabilidad">TS. VULNERABILILIDAD: </label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.tiempoControl" id="tiempo-control" type="text"
+                                       name="Tiempo de control" class="dec requerido-CLI" maxlength="6">
+                                <label for="tiempo-control">T. CONTROL: </label>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <span class="title" style="font-weight: 600">CONFIGURACION DE SIMULAICION</span>
+                        <div class="divider"></div>
+                        <div class="row" style="margin: 10px 0">
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.generadorPasientes" id="generador-pasientes" type="text"
+                                       name="Generador de numeros randomicos" class="num requerido-CLI" maxlength="2">
+                                <label for="generador-pasientes">G. PACIENTES: </label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="datosSimulacion.generadorRandomico" id="generador-randomico" type="text"
+                                       name="Generador de numeros randomicos" class="dec requerido-CLI" maxlength="8">
+                                <label for="generador-randomico">G. RANDOMICO: </label>
+                            </div>
+                            <div class="col s6">
+                                <div class="col s6" style="border-left: 1px solid">
+                                    <label>
+                                        <input type="radio" id="tiempo" value="T" class="with-gap"
+                                               v-model="tipoSimulacion"/>
+                                        <span style="margin-bottom: 8px">Tiempo</span>
+                                    </label>
+                                    <div class="input-field" class="col s12">
+                                        <input v-model="datosSimulacion.tiempoSimulacion" id="tiempo-simulacion" type="text"
+                                               name="Tiempo de simulacion" class="num requerido-CLI" maxlength="6"
+                                                :disabled="tipoSimulacion != 'T'">
+                                        <label for="tiempo-simulacion">MINUTOS: </label>
+                                    </div>
+                                </div>
+                                <div class="col s3">
+                                <label>
+                                    <input type="radio" id="dia" value="D" class="with-gap"
+                                           v-model="tipoSimulacion"/>
+                                    <span>Dia</span>
+                                </label>
+                                 <label>
+                                    <input type="radio" id="semana" value="S" class="with-gap"
+                                           v-model="tipoSimulacion" />
+                                    <span>Semana</span>
+                                </label>
+                                 <label>
+                                    <input type="radio" id="mes" value="M" class="with-gap"
+                                           v-model="tipoSimulacion" />
+                                    <span>Mes</span>
+                                </label>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                    </div>
+                    <div id="chatbot-footer" class="card grey lighten-4">
+                        <div class="row" style="padding: 10px">
+                            <div class="col s2">
+                                <a id="button-record" class="buton-chat btn-floating waves-effect"
+                                   @click="correrSimulacion()">
+                                    <i class="material-icons">play_arrow</i>
+                                </a>
+                            </div>
+                            <div class="col s10">
+                                <span class="title" style="font-weight: 600">RESULTADOS</span>
+                                <div class="divider"></div>
+                                <span> Tiempo promedio de asistencia (min)
+                                    <strong v-html="resultados.tiempoPromedio"></strong>
+                                </span>
+                                <div class="divider"></div>
+                                <span> Numero promedio de pacientes
+                                    <strong v-html="resultados.pasientesPromedio"></strong>
+                                </span>
+                                <div class="divider"></div>
+                                <span> Numero total de pacientes internados
+                                    <strong v-html="resultados.pasientesInternados"></strong>
+                                </span>
+                                <div class="divider"></div>
+                                <span> Numero total de pacientes recuperados
+                                    <strong v-html="resultados.pasientesRecuperados"></strong>
+                                </span>
+                                <div class="divider"></div>
+                                <span> Numero total de pacientes fallecidos
+                                    <strong v-html="resultados.pasientesFallecidos"></strong>
+                                </span>
+                                <div class="divider"></div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="col s7" style="padding-left: 0">
+                <div class="col s12" style="padding: 0;">
+                    <div id="tbl-log-simulacion" class="card" style="margin: 10px 0;">
+                        <div class="table-header card grey lighten-4">
+                            <div class="table-header-static">
+                                <span class="col s12 card-title" style="font-weight: 600">LOGS de Simulacion</span>
+                            </div>
+                            <div class="col s12 divider"></div>
+                            <div class="table-header-dinamic">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="center-align" width="200px">TIEMPO</th>
+                                            <th width="420px">DESCRIPCION</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="table-body">
+                            <table class="highlight">
+                                <tbody>
+                                    <tr v-for="log in logsSimulacion">
+                                        <td class="center-align"  width="200px">
+                                            <span v-html="log.tiempo"></span>
+                                        </td>
+                                        <td width="400px">
+                                            <span v-html="log.mensaje"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12" style="padding: 0;">
+                    <div id="img-log-simulacion" class="card grey lighten-4" style="margin: 10px 0; height: 236px">
+                        <img id="img-reporte" width="100%" height="234px" style="padding: 10px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie del contendio -->
+    <footer id="cm-footer" class="page-footer grey darken-4">
+        <div class="center-align" style="font-size: 12px; font-weight: bold;">
+            © Wilson Rodas, Carlos Morocho
+        </div>
+    </footer>
+</body>
+
+<!-- Incorporar las librerias -->
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/lib/jquery/jquery.scrollsync.js"></script>
+<script type="text/javascript" src="/lib/materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="/lib/vuejs/vue.min.js"></script>
+<script type="text/javascript" src="/lib/simjs/sim-0.26.js"></script>
+
+<!-- Incorporar las script -->
+<script type="text/javascript" src="/js/scroll-table.js"></script>
+<script type="text/javascript" src="/js/show-toast.js"></script>
+<script type="text/javascript" src="/js/text-validtions.js"></script>
+<script type="text/javascript" src="/js/simulacion.js"></script>
+
+</html>

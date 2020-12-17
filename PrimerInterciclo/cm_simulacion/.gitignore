@@ -1,0 +1,6 @@
+*.pyc
+*.pylintrc
+/venv/*
+/.idea/*
+/.vs/
+/logs/*
